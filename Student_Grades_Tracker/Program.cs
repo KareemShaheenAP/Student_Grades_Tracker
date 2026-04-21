@@ -6,54 +6,68 @@
         {
             if (averageGrade >= 0 && averageGrade <= 20)
             {
-                Console.WriteLine($"{studentName} average grade is {averageGrade} and he is freshman");
+                Console.WriteLine($"{studentName} average grade is {Math.Round(averageGrade, 2)} and he is freshman");
             }
             else if (averageGrade > 20 && averageGrade <= 40)
             {
-                Console.WriteLine($"{studentName} average grade is {averageGrade} and he is sophomore");
+                Console.WriteLine($"{studentName} average grade is {Math.Round(averageGrade, 2)} and he is sophomore");
             }
             else if (averageGrade > 40 && averageGrade <= 80)
             {
-                Console.WriteLine($"{studentName} average grade is {averageGrade} and he is junior");
+                Console.WriteLine($"{studentName} average grade is {Math.Round(averageGrade, 2)} and he is junior");
             }
             else if (averageGrade > 80 && averageGrade <= 100)
             {
-                Console.WriteLine($"{studentName} average grade is {averageGrade} and he is senior");
+                Console.WriteLine($"{studentName} average grade is {Math.Round(averageGrade,2)} and he is senior");
             }
         }
         static void Main(string[] args)
         {
-            List<double> ahmedGrades = new List<double>();
-            List<double> aliGrades = new List<double>();
-            List<double> kareemGrades = new List<double>();
-            ahmedGrades.AddRange(new double[] { 76, 90, 70, 81 });
-            aliGrades.AddRange(new double[] { 90, 83, 65, 92 });
-            kareemGrades.AddRange(new double[] { 88, 81, 90, 78 });
-            double averageGrade = 0;
-
-            for (int i = 0; i < ahmedGrades.Count; i++)
+            Dictionary<string, List<int>> students = new Dictionary<string, List<int>>();
+            while (true)
             {
-                averageGrade += (ahmedGrades[i]);
-            }
-            averageGrade /= ahmedGrades.Count;
-            GetLevel(averageGrade, "Ahmed");
+                Console.WriteLine("1. Add Student");
+                Console.WriteLine("2. View current students with grades");
+                Console.WriteLine("3. Exit");
+                Console.Write("Enter Choice: ");
+                var userInput = int.TryParse(Console.ReadLine() ,out int a);
+                switch (a)
+                {
+                    case 1:
+                        Console.Write("Enter Student Name: ");
+                        string studentName = Console.ReadLine();
+                        Random rand = new Random();
+                        students[studentName] = new List<int> { rand.Next(1, 101), rand.Next(1, 101), rand.Next(1, 101) };
+                        Console.WriteLine($"student {studentName} has been added.");
+                        break;
+                    case 2:
+                        if (students.Count == 0)
+                        {
+                            Console.WriteLine("No Students available to view Please add one.");
+                            break;
+                        }
+                        for (int i = 0; i <= students.Count -1; i++)
+                        {
+                            double studentAverage = 0;
+                            List<int> grades = students.ElementAt(i).Value;
+                            Console.Write("Grades are :");
+                            for (int j = 0; j <= grades.Count -1; j++)
+                            {
+                                studentAverage += grades[j];
+                                Console.Write(grades[j] + " ");
+                            }
+                            studentAverage /= grades.Count;
 
-            averageGrade = 0;
-            for (int i = 0; i < aliGrades.Count; i++)
-            {
-                averageGrade += (aliGrades[i]);
+                            GetLevel(studentAverage, students.ElementAt(i).Key);
+                        }
+                        break;
+                    case 3:
+                        return;
+                    default:
+                        break;
+                }
             }
-            averageGrade /= aliGrades.Count;
-            GetLevel(averageGrade, "Ali");
 
-
-            averageGrade = 0;
-            for (int i = 0; i < kareemGrades.Count; i++)
-            {
-                averageGrade += (kareemGrades[i]);
-            }
-            averageGrade /= kareemGrades.Count;
-            GetLevel(averageGrade, "Kareem");
         }
     }
 }
